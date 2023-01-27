@@ -13,31 +13,34 @@ const Timer = () => {
   const [time, setTime] = useState(timeZero);
   const [intervalRun, setIntervalRun] = useState(false);
   
-  const setNewTime = () => {
-    setTime(time => moment(time, 'HH:mm:ss:SSS').add(1, 'ms').format('HH:mm:ss:SSS'));
-  }
-
   const counterStarted = e => {
     e.preventDefault();
-    if (intervalRun === false){
-      setIntervalRun(true);
-    }
+    setIntervalRun(true);
   };
 
   const counterStop = e => {
     e.preventDefault();
     clearInterval(counter);
+    setIntervalRun(false);
   }
 
   const counterReset = e => {
-    e.preventDefault();
+    e.preventDefault(); 
     setTime(timeZero);
     setIntervalRun(false);
   }
   
-  useEffect (() => {
-    return () => {
-    counter = setInterval(setNewTime, 1)}}, [intervalRun]);
+  useEffect (() => {    
+      clearInterval(counter);
+
+      const setNewTime = () => {
+        if(intervalRun) {      
+          setTime(time => moment(time, 'HH:mm:ss:SSS').add(1, 'ms').format('HH:mm:ss:SSS'));
+        }
+      }
+
+      counter = setInterval(setNewTime, 1);
+    }, [intervalRun]);
   
   return (
     <div className={styles.timerArea}>
